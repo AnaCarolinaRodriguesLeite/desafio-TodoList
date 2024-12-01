@@ -21,9 +21,9 @@ Este projeto é uma aplicação Spring Boot para gerenciar tarefas. Ele oferece 
 - **Spring Boot 2.7.x**: Framework para desenvolvimento rápido de aplicações.
   - Spring Web: Para criação de APIs REST.
   - Spring Data JPA: Para integração com banco de dados.
-  - Spring Boot DevTools: Para facilitar o desenvolvimento.
+  - Spring Boot DevTools: Para facilitar o desenvolvimento. 
 - **H2 Database**: Banco de dados em memória para desenvolvimento e testes.
-- **Swagger**: Para documentação interativa da API.
+- **SpringDoc OpenAi 3**: Para documentação interativa da API - Swagger.
 - **Maven**: Gerenciador de dependências e build.
 - **IntelliJ IDEA Community**: Ambiente de desenvolvimento.
 
