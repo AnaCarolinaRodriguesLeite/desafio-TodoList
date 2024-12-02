@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -19,44 +18,54 @@ import br.com.anacarolina.desafio_todolist.repository.TodoRepository;
 @Service
 public class TodoService {
 
-  private static final Logger logger = LoggerFactory.getLogger(TodoService.class);
+    private static final Logger logger = LoggerFactory.getLogger(TodoService.class);
 
-    @Autowired
     private final TodoRepository todoRepository;
 
     public TodoService(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 
-    @SuppressWarnings("unchecked")
     public List<Todo> create(Todo tarefa, Pageable pageable) {
-      if (tarefa.getStatus() == null) {
-        tarefa.setStatus(StatusTodo.PENDENTE);
-      }
-      todoRepository.save(tarefa);
-      return (List<Todo>) list(pageable);
+        logger.info("Criando uma nova tarefa: {}", tarefa);
+        if (tarefa.getStatus() == null) {
+            tarefa.setStatus(StatusTodo.PENDENTE);
+        }
+        Todo savedTask = todoRepository.save(tarefa);
+        logger.info("Tarefa criada com sucesso: {}", savedTask);
+        return list(pageable).getContent();
     }
 
-    public Page<Todo> list(Pageable pageable) { 
-      Sort sort = Sort.by("dataCriacao").descending().and(Sort.by("titulo").ascending());
-      Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-      return todoRepository.findAll(sortedPageable);
+    public Page<Todo> list(Pageable pageable) {
+        logger.info("Listando tarefas com paginação: {}", pageable);
+        Sort sort = Sort.by("dataCriacao").descending().and(Sort.by("titulo").ascending());
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        Page<Todo> todos = todoRepository.findAll(sortedPageable);
+        logger.info("Tarefas listadas com sucesso. Total: {}", todos.getTotalElements());
+        return todos;
     }
 
-    @SuppressWarnings("unchecked")
     public List<Todo> update(Todo todo, Pageable pageable) {
-        Todo tarefa = todoRepository.findById(todo.getId()).orElseThrow(() -> new RuntimeException("Tarefa não encontrada"));
+        logger.info("Atualizando tarefa com ID: {}", todo.getId());
+        Todo tarefa = todoRepository.findById(todo.getId())
+                .orElseThrow(() -> {
+                    logger.error("Tarefa não encontrada para o ID: {}", todo.getId());
+                    return new RuntimeException("Tarefa não encontrada");
+                });
         tarefa.setStatus(todo.getStatus());
         if (todo.getStatus() == StatusTodo.CONCLUIDA) {
             tarefa.setDataConclusao(LocalDateTime.now());
+            logger.info("Tarefa marcada como concluída com data de conclusão: {}", tarefa.getDataConclusao());
         }
-        todoRepository.save(tarefa);
-        return (List<Todo>) list(pageable);
+        Todo updatedTask = todoRepository.save(tarefa);
+        logger.info("Tarefa atualizada com sucesso: {}", updatedTask);
+        return list(pageable).getContent();
     }
 
-    @SuppressWarnings("unchecked")
-    public List<Todo> detele(Long id, Pageable pageable) {
+    public List<Todo> detele(Long id) {
+      logger.info("Excluindo tarefa com ID: {}", id);
       todoRepository.deleteById(id);
-      return (List<Todo>) list(pageable);
-    }
+      logger.info("Tarefa excluída com sucesso.");
+      return todoRepository.findAll();
+  }  
 }

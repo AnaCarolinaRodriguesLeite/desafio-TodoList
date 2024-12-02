@@ -2,6 +2,8 @@ package br.com.anacarolina.desafio_todolist.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +24,10 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
-   private final TodoService service;
+
+    private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
+
+    private final TodoService service;
 
     public TodoController(TodoService service) {
         this.service = service;
@@ -30,23 +35,33 @@ public class TodoController {
 
     @PostMapping
     public ResponseEntity<List<Todo>> create(@RequestBody @Valid Todo todo, Pageable pageable) {
+        logger.info("Recebida solicitação para criar uma tarefa: {}", todo);
         List<Todo> novoTodo = service.create(todo, pageable);
+        logger.info("Tarefa criada com sucesso e lista retornada.");
         return ResponseEntity.status(HttpStatus.CREATED).body(novoTodo);
     }
 
     @GetMapping
     public ResponseEntity<Page<Todo>> list(Pageable pageable) {
-        return ResponseEntity.ok(service.list(pageable));
+        logger.info("Recebida solicitação para listar tarefas com paginação: {}", pageable);
+        Page<Todo> todos = service.list(pageable);
+        logger.info("Tarefas listadas com sucesso. Total retornado: {}", todos.getTotalElements());
+        return ResponseEntity.ok(todos);
     }
 
     @PutMapping
     public ResponseEntity<List<Todo>> update(@RequestBody Todo todo, Pageable pageable) {
-        return ResponseEntity.ok(service.update(todo, pageable));
+        logger.info("Recebida solicitação para atualizar uma tarefa: {}", todo);
+        List<Todo> updatedTodos = service.update(todo, pageable);
+        logger.info("Tarefa atualizada com sucesso.");
+        return ResponseEntity.ok(updatedTodos);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Todo> detele(@PathVariable Long id, Pageable pageable) {
-        service.detele(id, pageable);
+    public ResponseEntity<Void> detele(@PathVariable Long id) {
+        logger.info("Recebida solicitação para excluir a tarefa com ID: {}", id);
+        service.detele(id);
+        logger.info("Tarefa excluída com sucesso.");
         return ResponseEntity.noContent().build();
-    }
+    }    
 }

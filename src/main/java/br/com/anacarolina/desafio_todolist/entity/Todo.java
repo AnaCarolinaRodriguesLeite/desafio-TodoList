@@ -1,6 +1,5 @@
 package br.com.anacarolina.desafio_todolist.entity;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import br.com.anacarolina.desafio_todolist.enums.StatusTodo;

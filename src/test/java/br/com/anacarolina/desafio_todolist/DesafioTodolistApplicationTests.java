@@ -44,4 +44,54 @@ class DesafioTodolistApplicationTests {
 				.exchange()
 				.expectStatus().isBadRequest();
 	}
+
+@Test
+void testeUpdateTodoSucess() {
+    var dataCriacao = LocalDateTime.now();
+    var dataConclusao = LocalDateTime.now();
+    var todo = new Todo("Estudar Spring Boot", "Estudar Spring Boot com a Alura", StatusTodo.PENDENTE, dataCriacao, dataConclusao);
+
+    var createdTodo = webTestClient.post().uri("/todos")
+            .bodyValue(todo)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody()
+            .jsonPath("$[0].titulo").isEqualTo(todo.getTitulo())
+            .returnResult()
+            .getResponseBody()
+            .length;
+
+    todo.setStatus(StatusTodo.CONCLUIDA);
+    todo.setDataConclusao(LocalDateTime.now());
+
+    webTestClient.put().uri("/todos")
+            .bodyValue(todo)
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody()
+            .jsonPath("$[0].status").isEqualTo(StatusTodo.CONCLUIDA.name())
+            .jsonPath("$[0].dataConclusao").exists();
+}
+
+@Test
+void testeDeleteTodoSucess() {
+    var dataCriacao = LocalDateTime.now();
+    var dataConclusao = LocalDateTime.now();
+    var todo = new Todo("Estudar Spring Boot", "Estudar Spring Boot com a Alura", StatusTodo.PENDENTE, dataCriacao, dataConclusao);
+
+    var createdTodo = webTestClient.post().uri("/todos")
+            .bodyValue(todo)
+            .exchange()
+            .expectStatus().isCreated()
+            .expectBody()
+            .jsonPath("$[0].titulo").isEqualTo(todo.getTitulo())
+            .returnResult()
+            .getResponseBody()
+            .length;
+
+    webTestClient.delete().uri("/todos/{id}", (createdTodo))
+            .exchange()
+            .expectStatus().isNoContent();
+}
+
 }
