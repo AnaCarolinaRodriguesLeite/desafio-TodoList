@@ -17,7 +17,7 @@ Este projeto é uma aplicação Spring Boot para gerenciar tarefas. Ele oferece 
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Java 11**: Linguagem principal.
+- **Java 17**: Linguagem principal.
 - **Spring Boot 2.7.x**: Framework para desenvolvimento rápido de aplicações.
   - Spring Web: Para criação de APIs REST.
   - Spring Data JPA: Para integração com banco de dados.
@@ -38,14 +38,15 @@ src
 │   │   └── com.example.desafio
 │   │       ├── DesafioApplication.java          # Classe principal
 │   │       ├── model                            # Pacote com as classes de modelo
-│   │       │   └── Tarefa.java
+│   │       │   └── Todo.java
+|   |       ├── entity
+│   │       │   └── Todo.java                    # Pacote com as entidades
+|   |       ├── enums
+│   │       │   └── StatusTodo.java              #Paconte com o enum de status
 │   │       ├── repository                       # Pacote com os repositórios
-│   │       │   └── TarefaRepository.java
+│   │       │   └── TodoRepository.java
 │   │       ├── controller                       # Pacote com os controladores
-│   │       │   ├── HelloController.java         # Endpoint de teste
-│   │       │   └── TarefaController.java        # Endpoints de CRUD
-│   │       ├── config                           # Pacote com configurações
-│   │       │   └── SwaggerConfig.java           # Configuração do Swagger
+│   │           └── TodoController.java        # Endpoints de CRUD
 │   ├── resources
 │       ├── application.properties               # Configurações do Spring Boot
 │       ├── static                               # Arquivos estáticos (não utilizado aqui)
@@ -65,7 +66,7 @@ src
 - **JDK 11** instalado ([Download](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html)).
 - **Maven** instalado ([Download](https://maven.apache.org/download.cgi)).
 - IntelliJ IDEA ou qualquer IDE compatível.
-- Postman ou outro cliente HTTP (opcional, para testar a API).
+- Swagger ou outro cliente HTTP ([link](http://localhost:8081/swagger-ui/index.html#/todo-controller/list).
 
 ### Passos para Rodar
 
@@ -88,7 +89,7 @@ src
    mvn spring-boot:run
    ```
 
-4. A aplicação estará disponível em: [http://localhost:8080](http://localhost:8080)
+4. A aplicação estará disponível em: [http://localhost:8081](http://localhost:8081)
 
 ---
 
@@ -109,7 +110,7 @@ src
 ## 🛡️ Documentação da API com Swagger
 
 1. Após iniciar a aplicação, acesse o Swagger:
-   [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+   [http://localhost:8081/swagger-ui/index.html#/todo-controller/list](http://localhost:8081/swagger-ui/index.html#/todo-controller/list)
 
 2. Explore e teste todos os endpoints diretamente pela interface interativa do Swagger.
 
@@ -128,6 +129,10 @@ O projeto utiliza o **H2 Database**, um banco de dados em memória. Os dados sã
 ---
 
 ## 📚 Recursos Adicionais
+
+● Implementação de paginação para listagem.
+● Logs básicos utilizando o framework de logging de sua escolha.
+● Testes unitários simples para os serviços ou controladores.
 
 ---
 
