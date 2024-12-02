@@ -63,7 +63,7 @@ src
 
 ### Pré-requisitos
 
-- **JDK 11** instalado ([Download](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html)).
+- **JDK 17** instalado ([Download](https://www.oracle.com/java/technologies/javase/jdk11-archive-downloads.html)).
 - **Maven** instalado ([Download](https://maven.apache.org/download.cgi)).
 - IntelliJ IDEA ou qualquer IDE compatível.
 - Swagger ou outro cliente HTTP ([link](http://localhost:8081/swagger-ui/index.html#/todo-controller/list).
